@@ -10,6 +10,9 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import DB.Models.ToDoItem;
+
+import static android.R.attr.data;
 import static com.example.rparuthi.todoapp.R.id.etEditItem;
 import static com.example.rparuthi.todoapp.R.id.textView;
 
@@ -20,19 +23,24 @@ public class EditItemActivity extends AppCompatActivity{
 
     private int editIndex;
 
+    private ToDoItem toDoItem;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_item);
 
+
         //Get the instance of EditText
         etEditItem = (EditText) findViewById(R.id.etEditItem);
 
-        //Get the value of click index from intent
+        //Get the value of click index from intentn
         editIndex = getIntent().getIntExtra("index",0);
 
+        toDoItem = (ToDoItem)getIntent().getSerializableExtra("todoItem");
+
         //Get the text value from intent
-        String editText = getIntent().getStringExtra("text");
+        String editText = toDoItem.getItemText();
 
         //Set the text in EditText Field
         etEditItem.setText(editText);
@@ -45,11 +53,13 @@ public class EditItemActivity extends AppCompatActivity{
     //Function called on Save
     public void onSave(View v)
     {
+        String t = etEditItem.getText().toString();
         //Create intent data
         Intent data = new Intent();
 
+        toDoItem.setItemText(etEditItem.getText().toString());
         //Pass required data back as a result
-        data.putExtra("editToDo",etEditItem.getText().toString());
+        data.putExtra("editedToDoItem",toDoItem);
         data.putExtra("index",editIndex);
 
         //Return the data with OK result
